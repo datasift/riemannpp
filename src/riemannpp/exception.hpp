@@ -60,7 +60,9 @@ namespace riemannpp {
 		// same as the default constructor, with the exception being that the
 		// reason string is overridden by the given parameter.
 		internal_exception(const std::string& reason)
-			: exception(strerror(errno))
+			: exception(
+					reason + ", error: " + strerror(errno)
+				)
 			, d_error(errno)
 			, d_reason(reason) {}
 
