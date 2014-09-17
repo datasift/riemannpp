@@ -41,7 +41,7 @@ client::client(client_type type, const std::string& host, int port) {
 	d_client = riemann_client_create(riemann_client_type_t(type), 
 		host.c_str(), port);
 	if (!d_client) {
-		throw internal_exception("failed to create riemann client");
+		throw internal_exception(errno, "failed to create riemann client");
 	}
 }
 
@@ -69,7 +69,7 @@ client::connect(client_type type, const std::string& host, int port) {
 		message += host;
 		message += ":";
 		message += std::to_string(port);
-		throw internal_exception(message);
+		throw internal_exception(errno, message);
 	}
 }
 
@@ -77,7 +77,7 @@ void
 client::disconnect() {
 	int result = riemann_client_disconnect(d_client);
 	if (0 != result) {
-		throw internal_exception("failed to disconnect client");
+		throw internal_exception(errno, "failed to disconnect client");
 	}
 }
 
@@ -85,7 +85,7 @@ void
 client::send(message&& m) {
 	int result = riemann_client_send_message(d_client, m.release());
 	if (0 != result) {
-		throw internal_exception("failed to send message");
+		throw internal_exception(errno, "failed to send message");
 	}
 }
 
@@ -104,7 +104,7 @@ void
 client::send_oneshot(message&& m) {
 	int result = riemann_client_send_message_oneshot(d_client, m.release());
 	if (0 != result) {
-		throw internal_exception("failed to send oneshot message");
+		throw internal_exception(errno, "failed to send oneshot message");
 	}
 }
 
